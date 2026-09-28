@@ -62,7 +62,6 @@ const regionalData = dashboardData.regions as Region[]
 
 const theme = useTheme()
 const isDark = computed(() => theme.global.current.value.dark)
-const selectedPeriod = ref('Latest')
 const selectedAttentionId = ref(attentionItems[0]?.id ?? '')
 
 const themeAction = computed(() => `Switch to ${isDark.value ? 'light' : 'dark'} theme`)
@@ -169,8 +168,6 @@ const chartOptions = computed(() => ({
   },
 }))
 
-const periodOptions = ['Latest', '3 months', '6 months', '12 months', '24 months']
-
 const formatMetricValue = (metric: Metric) => {
   const value = Number(metric.value)
 
@@ -223,23 +220,14 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
   <VApp>
     <VAppBar class="site-header" flat>
       <VToolbar class="header-inner" aria-label="Main header">
-        <a class="brand" href="#main" aria-label="Canada at a Glance home">
-          <span class="brand-mark" aria-hidden="true">CA</span>
-          <span class="brand-name">Canada at a Glance</span>
+        <a class="brand" href="#main" aria-label="National daily briefing home">
+          <span class="brand-mark" aria-hidden="true">🇨🇦</span>
+          <span class="brand-name">National daily briefing</span>
         </a>
 
         <VSpacer />
 
         <div class="header-controls" aria-label="Dashboard controls">
-          <label class="period-select" for="reference-period">
-            <span class="sr-only">Reference period</span>
-            <select id="reference-period" v-model="selectedPeriod" aria-label="Select reference period">
-              <option v-for="period in periodOptions" :key="period" :value="period">
-                {{ period }}
-              </option>
-            </select>
-          </label>
-
           <VBtn
             class="theme-toggle"
             variant="outlined"
@@ -257,18 +245,13 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
     <VMain id="main">
       <VContainer class="briefing-shell">
         <header class="briefing-intro">
-          <p class="eyebrow">National Daily Briefing</p>
-          <h1>Canada at a Glance</h1>
-          <p class="intro-copy">
-            A concise view of national conditions, meaningful changes, and the regions they touch.
-          </p>
+          <p class="eyebrow">National daily briefing</p>
+          <h1>Canada at a glance</h1>
         </header>
 
         <div class="data-notice" role="status" aria-live="polite">
           <span class="status-mark" aria-hidden="true"></span>
-          <strong>Prototype data</strong>
-          <span class="notice-divider" aria-hidden="true"></span>
-          <span>{{ dashboardData.meta.status }}</span>
+          <span>Prototype data for demonstration purposes only.</span>
           <span class="notice-divider" aria-hidden="true"></span>
           <span>{{ dashboardData.meta.lastRefreshedLabel }}</span>
         </div>
@@ -355,7 +338,6 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
               <p class="eyebrow">02 / Overview</p>
               <h2 id="pulse-title">National Pulse</h2>
             </div>
-            <p class="section-note">Current national indicators and their latest movement.</p>
           </div>
 
           <div class="metrics-grid">
@@ -382,7 +364,6 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
                 </div>
 
                 <div class="metric-footer">
-                  <span>{{ metric.source }}</span>
                   <span>{{ metric.unit }}</span>
                 </div>
               </VCardText>
@@ -390,7 +371,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
           </div>
         </section>
 
-        <section class="detail-grid" aria-label="Economic and affordability detail">
+        <section class="trend-row" aria-label="Economic trend detail">
           <article class="panel chart-panel" aria-labelledby="economic-title">
             <div class="section-heading compact-heading">
               <div>
@@ -403,7 +384,9 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
               <Line :data="chartData" :options="chartOptions" aria-label="Economic trend chart" />
             </div>
           </article>
+        </section>
 
+        <section class="bottom-row" aria-label="Affordability and regional comparison">
           <article class="panel affordability-panel" aria-labelledby="affordability-title">
             <div class="section-heading compact-heading">
               <div>
@@ -431,9 +414,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
               </li>
             </ul>
           </article>
-        </section>
 
-        <section class="lower-grid" aria-label="Regional comparison and national conditions">
           <article class="panel region-panel" aria-labelledby="regions-title">
             <div class="section-heading compact-heading">
               <div>
@@ -456,27 +437,6 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
                 <span role="cell">{{ region.housingStarts.toFixed(1) }}k</span>
               </div>
             </div>
-          </article>
-
-          <article class="panel conditions-panel" aria-labelledby="conditions-title">
-            <div class="section-heading compact-heading">
-              <div>
-                <p class="eyebrow">06 / National conditions</p>
-                <h2 id="conditions-title">National overview</h2>
-              </div>
-            </div>
-
-            <div class="map-card" aria-label="National conditions placeholder map">
-              <div class="map-glow"></div>
-              <div class="map-grid">
-                <span class="map-regions region-west">BC</span>
-                <span class="map-regions region-plain">AB</span>
-                <span class="map-regions region-east">ON</span>
-                <span class="map-regions region-central">QC</span>
-                <span class="map-regions region-atlantic">AT</span>
-              </div>
-            </div>
-            <p class="conditions-note">Prototype conditions map showing areas with elevated affordability and labour pressure.</p>
           </article>
         </section>
 
