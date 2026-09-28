@@ -213,7 +213,11 @@ h1 {
   height: 9px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: rgb(var(--v-theme-secondary));
+  background: #7ba4d9;
+}
+
+.v-theme--briefLight .status-mark {
+  background: #3f5e9f;
 }
 
 .notice-divider {
