@@ -140,7 +140,13 @@ const chartOptions = computed(() => ({
       labels: {
         usePointStyle: true,
         boxWidth: 10,
-        color: isDark.value ? '#f1f3ee' : '#202a25',
+        boxHeight: 10,
+        padding: 12,
+        color: isDark.value ? '#dfe5de' : '#2d352f',
+        font: {
+          size: 11,
+          weight: 600,
+        },
       },
     },
     tooltip: {
@@ -156,12 +162,22 @@ const chartOptions = computed(() => ({
   scales: {
     x: {
       grid: { display: false },
-      ticks: { color: isDark.value ? '#dfe5de' : '#2d352f' },
-    },
-    y: {
-      grid: { color: isDark.value ? 'rgba(241,243,238,0.08)' : 'rgba(32,42,37,0.08)' },
       ticks: {
         color: isDark.value ? '#dfe5de' : '#2d352f',
+        font: {
+          size: 11,
+          weight: 600,
+        },
+      },
+    },
+    y: {
+      grid: { color: isDark.value ? 'rgba(241,243,238,0.06)' : 'rgba(32,42,37,0.06)' },
+      ticks: {
+        color: isDark.value ? '#dfe5de' : '#2d352f',
+        font: {
+          size: 11,
+          weight: 600,
+        },
         callback: (value: string | number) => `${value}%`,
       },
     },
@@ -270,7 +286,13 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
                 v-for="item in attentionItems"
                 :key="item.id"
                 class="attention-item"
-                :class="{ active: selectedAttention?.id === item.id }"
+                :class="{
+                  active: selectedAttention?.id === item.id,
+                  high: item.severity === 'high',
+                  medium: item.severity === 'medium',
+                  low: item.severity === 'low',
+                }"
+                :data-level="item.severity"
                 type="button"
                 :aria-pressed="selectedAttention?.id === item.id"
                 @click="selectedAttentionId = item.id"
@@ -293,7 +315,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
             <div class="section-heading compact-heading">
               <div>
                 <p class="eyebrow">Selected issue</p>
-                <h2 id="focus-title">National condition</h2>
+                <h2 id="focus-title">Selected Issue</h2>
               </div>
             </div>
 
