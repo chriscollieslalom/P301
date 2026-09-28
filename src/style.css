@@ -379,7 +379,6 @@ h2 {
 .focus-header,
 .metric-card-top,
 .metric-meta,
-.metric-footer,
 .attention-meta {
   display: flex;
   align-items: center;
@@ -426,7 +425,6 @@ h2 {
 .focus-period,
 .metric-period,
 .metric-kicker,
-.metric-footer,
 .metric-meta,
 .attention-meta {
   color: rgba(var(--v-theme-on-background), 0.66);
@@ -572,14 +570,13 @@ h2 {
 }
 
 .metric-period,
-.metric-meta,
-.metric-footer {
+.metric-meta {
   font-size: 0.68rem;
   opacity: 0.78;
 }
 
 .metric-meta {
-  justify-content: space-between;
+  justify-content: flex-start;
   font-size: 0.68rem;
 }
 

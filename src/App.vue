@@ -219,6 +219,29 @@ const getDirectionLabel = (metric: Metric) => {
   return 'Unchanged'
 }
 
+const formatChangeSummary = (metric: Metric) => {
+  const comparison = metric.comparisonLabel
+    .replace(/^vs\s+/i, 'vs. ')
+    .replace(/\b(Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (month) => {
+      const monthNames: Record<string, string> = {
+        Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', Jun: 'June',
+        Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December',
+      }
+      return monthNames[month] ?? month
+    })
+
+  if (metric.changeDirection === 'unchanged') return `Unchanged ${comparison}`
+
+  const delta = Math.abs(Number(metric.value - metric.previousValue))
+  const amount = metric.unit === '%'
+    ? `${delta.toFixed(1)} percentage points`
+    : metric.id === 'cad-usd'
+      ? `${delta.toFixed(2)} ${metric.unit}`
+      : `${delta.toFixed(1)} ${metric.unit}`
+
+  return `${getDirectionLabel(metric)} by ${amount} ${comparison}`
+}
+
 const getInterpretationLabel = (metric: Metric) => {
   const labels = {
     informational: 'Informational',
@@ -262,7 +285,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
       <VContainer class="briefing-shell">
         <header class="briefing-intro">
           <p class="eyebrow">National daily briefing</p>
-          <h1>Canada at a glance</h1>
+          <h1>Canada at a Glance</h1>
         </header>
 
         <div class="data-notice" role="status" aria-live="polite">
@@ -277,7 +300,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
             <div class="section-heading compact-heading">
               <div>
                 <p class="eyebrow">01 / Requires attention</p>
-                <h2 id="attention-title">Attention panel</h2>
+                <h2 id="attention-title">Attention Panel</h2>
               </div>
             </div>
 
@@ -381,12 +404,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
                 </div>
 
                 <div class="metric-meta">
-                  <span>{{ getDirectionLabel(metric) }}</span>
-                  <span>{{ metric.comparisonLabel }}</span>
-                </div>
-
-                <div class="metric-footer">
-                  <span>{{ metric.unit }}</span>
+                  <span>{{ formatChangeSummary(metric) }}</span>
                 </div>
               </VCardText>
             </VCard>
@@ -398,22 +416,22 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
             <div class="section-heading compact-heading">
               <div>
                 <p class="eyebrow">03 / Economic momentum</p>
-                <h2 id="economic-title">Economic trend</h2>
+                <h2 id="economic-title">Economic Trend</h2>
               </div>
             </div>
 
             <div class="chart-wrap">
-              <Line :data="chartData" :options="chartOptions" aria-label="Economic trend chart" />
+              <Line :data="chartData" :options="chartOptions" aria-label="Economic Trend chart" />
             </div>
           </article>
         </section>
 
-        <section class="bottom-row" aria-label="Affordability and regional comparison">
+        <section class="bottom-row" aria-label="Canadians and Affordability; Provincial and Territorial Comparison">
           <article class="panel affordability-panel" aria-labelledby="affordability-title">
             <div class="section-heading compact-heading">
               <div>
                 <p class="eyebrow">04 / Affordability</p>
-                <h2 id="affordability-title">Canadians and affordability</h2>
+                <h2 id="affordability-title">Canadians and Affordability</h2>
               </div>
             </div>
 
@@ -441,7 +459,7 @@ const getSeverityLabel = (item: AttentionItem) => item.severity.charAt(0).toUppe
             <div class="section-heading compact-heading">
               <div>
                 <p class="eyebrow">05 / Regions</p>
-                <h2 id="regions-title">Provincial and territorial comparison</h2>
+                <h2 id="regions-title">Provincial and Territorial Comparison</h2>
               </div>
             </div>
 
